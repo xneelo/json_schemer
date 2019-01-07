@@ -17,10 +17,7 @@ module JSONSchemer
       end
 
       ID_KEYWORD = '$id'
-      DEFAULT_REF_RESOLVER = proc { |uri| raise UnknownRef, uri.to_s }
-      NET_HTTP_REF_RESOLVER = proc { |uri| JSON.parse(Net::HTTP.get(uri)) }
       BOOLEANS = Set[true, false].freeze
-
       RUBY_REGEX_ANCHORS_TO_ECMA_262 = {
         :bos => 'A',
         :eos => 'z',

@@ -26,14 +26,16 @@ module JSONSchemer
   class InvalidFileURI < StandardError; end
   class InvalidSymbolKey < StandardError; end
 
+  DEFAULT_META_SCHEMA = 'http://json-schema.org/draft-07/schema#'
+
   DRAFT_CLASS_BY_META_SCHEMA = {
     'http://json-schema.org/draft-04/schema#' => Schema::Draft4,
     'http://json-schema.org/draft-06/schema#' => Schema::Draft6,
     'http://json-schema.org/draft-07/schema#' => Schema::Draft7
   }.freeze
 
-  DEFAULT_META_SCHEMA = 'http://json-schema.org/draft-07/schema#'
-
+  DEFAULT_REF_RESOLVER = proc { |uri| raise UnknownRef, uri.to_s }
+  NET_HTTP_REF_RESOLVER = proc { |uri| JSON.parse(Net::HTTP.get(uri)) }
   FILE_URI_REF_RESOLVER = proc do |uri|
     raise InvalidFileURI, 'must use `file` scheme' unless uri.scheme == 'file'
     raise InvalidFileURI, 'cannot have a host (use `file:///`)' if uri.host && !uri.host.empty?
