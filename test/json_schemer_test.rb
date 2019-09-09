@@ -129,6 +129,17 @@ class JSONSchemerTest < Minitest::Test
     }
   end
 
+  def test_it_does_not_fail_using_insert_defaults_when_the_schema_is_completely_empty
+    schema = {}
+    data = {
+      'a' => 1
+    }
+    assert JSONSchemer.schema(schema, insert_property_defaults: true).valid?(data)
+    assert data == {
+      'a' => 1
+    }
+  end
+
   def test_it_does_not_fail_using_insert_defaults_when_no_properties_are_defined_by_schema
     schema = {
       '$comment' => 'Mostly empty schema'
