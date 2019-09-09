@@ -129,6 +129,36 @@ class JSONSchemerTest < Minitest::Test
     }
   end
 
+  def test_it_does_not_fail_using_insert_defaults_when_properties_containe_a_boolean_defined_property
+    schema = {
+      'properties' => {
+        'a' => true
+      }
+    }
+    data = {
+      'a' => 1
+    }
+    assert JSONSchemer.schema(schema, insert_property_defaults: true).valid?(data)
+    assert data == {
+      'a' => 1
+    }
+  end
+
+  def test_it_does_not_fail_using_insert_defaults_when_properties_containe_a_boolean_defined_property_that_does_not_exist
+    schema = {
+      'properties' => {
+        'b' => true
+      }
+    }
+    data = {
+      'a' => 1
+    }
+    assert JSONSchemer.schema(schema, insert_property_defaults: true).valid?(data)
+    assert data == {
+      'a' => 1,
+    }
+  end
+
   def test_it_allows_disabling_format
     schema = JSONSchemer.schema(
       { 'format' => 'email' },
